@@ -20,22 +20,27 @@ function App() {
       password: inputPassword.current.value,
     };
     setTimeout(() => {
-      if (userData.password.length >= 6) {
-        if (
-          userData.username == "stiven@gmail.com" &&
-          userData.password == "1234567"
-        ) {
-          localStorage.setItem("user", JSON.stringify(userData));
-          setIsLoading("success");
-          setPage("welcome");
-          console.log("Usuario guardado:", userData);
+      const gmailRegex = new RegExp("^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$");
+      if (gmailRegex.test(userData.username)) {
+        if (userData.password.length >= 6) {
+          if (
+            userData.username == "stiven@gmail.com" &&
+            userData.password == "1234567"
+          ) {
+            localStorage.setItem("user", JSON.stringify(userData));
+            setIsLoading("success");
+            setPage("welcome");
+          } else {
+            setIsLoading("Error");
+            setError("Usuario o Contraseña incorrecta");
+          }
         } else {
           setIsLoading("Error");
-          setError("Usuario o Contraseña incorrecta");
+          setError("La contraseña debe ser minimo de 6 caracteres");
         }
       } else {
         setIsLoading("Error");
-        setError("La contraseña debe ser minimo de 6 caracteres");
+        setError("El correo no es valido");
       }
     }, 2000);
   };
@@ -53,21 +58,19 @@ function App() {
                 <form action="" className="h-100" onSubmit={login}>
                   <div className="form-floating mb-3 mt-3 mt-md-5">
                     <input
-                      type="email"
+                      type="text"
                       className="form-control"
                       ref={inputUser}
-                      placeholder="name@example.com"
                     />
-                    <label for="floatingInputUser">Usuario</label>
+                    <label htmlFor="floatingInputUser">Usuario</label>
                   </div>
                   <div className="form-floating  mb-3">
                     <input
                       type="password"
                       className="form-control"
                       ref={inputPassword}
-                      placeholder=""
                     />
-                    <label for="floatingInputPassword">Contraseña</label>
+                    <label htmlFor="floatingInputPassword">Contraseña</label>
                   </div>
                   <div className="footer">
                     {isLoading == "loading" ? (
